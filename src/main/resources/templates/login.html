@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments/head}"></head>
+<body>
+<nav th:replace="~{fragments/navbar}"></nav>
+<main>
+    <h2>Вход</h2>
+    <div th:if="${param.error}">
+        Невалидно потребителско име или парола
+    </div>
+    <div th:if="${param.logout}">
+        Излязохте успешно от профила си
+    </div>
+    <form th:action="@{/sign-in}" method="post">
+        <div>
+            <label>Потребителско име или имейл</label>
+            <input type="text" name="usernameOrEmail" placeholder="Въведете потребителско име">
+        </div>
+        <div>
+            <label>Парола</label>
+            <input type="password" name="password" placeholder="Въведете парола">
+        </div>
+        <button type="submit">Вход</button>
+        <p>Нямаш акаунт? <a href="/register">Регистрирай се</a></p>
+    </form>
+</main>
+<footer th:replace="~{fragments/footer}"></footer>
+</body>
+</html>
