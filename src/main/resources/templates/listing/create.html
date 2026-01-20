@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments/head}"></head>
+<body>
+<nav th:replace="~{fragments/navbar}"></nav>
+<main>
+    <h1>Добавяне на обява</h1>
+    <form th:action="@{listings/submit}" method="post" th:object="${listing}">
+
+    </form>
+</main>
+<footer th:replace="~{fragments/footer}"></footer>
+</body>
+</html>
