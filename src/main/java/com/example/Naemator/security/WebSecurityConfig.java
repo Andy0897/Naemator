@@ -26,11 +26,11 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/home", "/access-denied").permitAll()
-                        .requestMatchers("/sign-in", "/sign-up", "/submit").anonymous()
+                        .requestMatchers("/login", "/register", "/submit").anonymous()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-                        .loginPage("/sign-in")
+                        .loginPage("/login")
                         .usernameParameter("usernameOrEmail")
                         .passwordParameter("password")
                         .defaultSuccessUrl("/home", true)

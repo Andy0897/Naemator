@@ -3,9 +3,11 @@ package com.example.Naemator.service;
 import com.example.Naemator.model.Listing;
 import com.example.Naemator.model.ListingStatus;
 import com.example.Naemator.model.User;
+import com.example.Naemator.repository.CategoryRepository;
 import com.example.Naemator.repository.ListingRepository;
 import com.example.Naemator.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +21,15 @@ import java.util.List;
 public class ListingService {
     ListingRepository listingRepository;
     UserRepository userRepository;
+    CategoryRepository categoryRepository;
 
+    public ListingService(ListingRepository listingRepository, UserRepository userRepository, CategoryRepository categoryRepository) {
+        this.listingRepository = listingRepository;
+        this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
+    }
+
+    @Transactional
     public String submitCreateListing(Listing listing, BindingResult bindingResult, MultipartFile[] images, Principal principal, Model model) {
         List<byte[]> imageList = new ArrayList<>();
         boolean areImagesSelected = false;
@@ -34,8 +44,9 @@ public class ListingService {
         } catch (Exception e) {
             hasUploadError = true;
         }
-        if(bindingResult.hasFieldErrors("title") || bindingResult.hasFieldErrors("description") || bindingResult.hasFieldErrors("pricePerDay") || bindingResult.hasFieldErrors("city") || hasUploadError || !areImagesSelected) {
+        if (bindingResult.hasFieldErrors("title") || bindingResult.hasFieldErrors("description") || bindingResult.hasFieldErrors("pricePerDay") || bindingResult.hasFieldErrors("city") || hasUploadError || !areImagesSelected) {
             model.addAttribute("listing", listing);
+            model.addAttribute("categories", categoryRepository.findAll());
             model.addAttribute("hasUploadError", hasUploadError);
             model.addAttribute("areImagesSelected", areImagesSelected);
             return "listing/create";

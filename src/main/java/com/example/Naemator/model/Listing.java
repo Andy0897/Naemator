@@ -1,8 +1,11 @@
 package com.example.Naemator.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,20 +16,29 @@ public class Listing {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotEmpty(message = "Полето не може да бъде празно")
     private String title;
 
+    @NotEmpty(message = "Полето не може да бъде празно")
     private String description;
 
+    @Min(value = 0)
     private double pricePerDay;
 
+    @NotEmpty(message = "Полето не може да бъде празно")
     private String city;
 
-    private List<byte[]> images;
+    @Lob
+    @ElementCollection
+    private List<byte[]> images = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
     private ListingStatus listingStatus;
 
+    @ManyToOne
     private User owner;
 
+    @ManyToOne
     private Category category;
 
     private LocalDate createdAt;

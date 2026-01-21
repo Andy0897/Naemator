@@ -22,13 +22,13 @@ public class UserService {
             model.addAttribute("user", user);
             model.addAttribute("existsUserByUsername", checkIfExistsUserByUsername(user.getUsername()));
             model.addAttribute("existsUserByEmail", checkIfExistsUserByEmail(user.getEmail()));
-            return "sign-up";
+            return "register";
         }
         user.setEnable(true);
         user.setRole("USER");
         user.setPassword(encoder.encode(user.getPassword()));
         userRepository.save(user);
-        return "redirect:/sign-in";
+        return "redirect:/login";
     }
 
     public String blockUser(Long userId) {

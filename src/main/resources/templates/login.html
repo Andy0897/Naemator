@@ -11,7 +11,7 @@
     <div th:if="${param.logout}">
         Излязохте успешно от профила си
     </div>
-    <form th:action="@{/sign-in}" method="post">
+    <form th:action="@{/login}" method="post">
         <div>
             <label>Потребителско име или имейл</label>
             <input type="text" name="usernameOrEmail" placeholder="Въведете потребителско име">

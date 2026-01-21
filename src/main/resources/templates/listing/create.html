@@ -4,9 +4,35 @@
 <body>
 <nav th:replace="~{fragments/navbar}"></nav>
 <main>
-    <h1>Добавяне на обява</h1>
-    <form th:action="@{listings/submit}" method="post" th:object="${listing}">
-
+    <h1>Публикуване на обява</h1>
+    <form th:action="@{/listings/submit}" method="post" th:object="${listing}" enctype="multipart/form-data">
+        <div>
+            <label>Снимки</label>
+            <input type="file" name="images" multiple>
+        </div>
+        <div>
+            <label>Заглавие</label>
+            <input th:field="*{title}">
+        </div>
+        <div>
+            <label>Описание</label>
+            <textarea rows="4" th:field="*{description}"></textarea>
+        </div>
+        <div>
+            <label>Град или село</label>
+            <input th:field="*{city}">
+        </div>
+        <div>
+            <label>Цена за ден</label>
+            <input type="number" step="any" th:field="*{pricePerDay}">
+        </div>
+        <div>
+            <label>Категория</label>
+            <select th:field="*{category}">
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+            </select>
+        </div>
+        <button>Публикувай</button>
     </form>
 </main>
 <footer th:replace="~{fragments/footer}"></footer>

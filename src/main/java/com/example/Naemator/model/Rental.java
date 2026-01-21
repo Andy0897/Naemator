@@ -12,8 +12,10 @@ public class Rental {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @ManyToOne
     private Listing listing;
 
+    @ManyToOne
     private User renter;
 
     private LocalDate startDate;
