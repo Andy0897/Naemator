@@ -1,6 +1,7 @@
 package com.example.Naemator.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.time.LocalDate;
 
@@ -21,6 +22,12 @@ public class Rental {
     private LocalDate startDate;
 
     private LocalDate endDate;
+
+    @NotEmpty(message = "Полето не може да бъде празно")
+    private String city;
+
+    @NotEmpty(message = "Полето не може да бъде празно")
+    private String address;
 
     private double totalPrice;
 
@@ -62,6 +69,22 @@ public class Rental {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public double getTotalPrice() {

@@ -9,6 +9,7 @@
     <p style="white-space: pre-line" th:text="${listing.description}"></p>
     <h3 th:text="${listing.pricePerDay}"></h3>
     <p th:text="${listing.city}"></p>
+    <button th:onclick="|location.href='/rentals/rent/${listing.id}'|">Наеми</button>
 </main>
 <footer th:replace="~{fragments/footer}"></footer>
 </body>

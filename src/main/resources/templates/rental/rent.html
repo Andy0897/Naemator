@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments/head}"></head>
+<body>
+<nav th:replace="~{fragments/navbar}"></nav>
+<main>
+    <h1>Наемане на обява</h1>
+    <form th:action="@{/rentals/submit-rent/{listingId}(listingId=${listingId})}" method="post" th:object="${rental}">
+        <div>
+            <label>Град или село</label>
+            <input th:field="*{city}">
+        </div>
+        <div>
+            <label>Адрес</label>
+            <input th:field="*{address}">
+        </div>
+        <div>
+            <label class="form-label">Период</label>
+            <input type="text" id="dateRange" placeholder="Избери период">
+        </div>
+        <input type="hidden" th:field="*{startDate}" id="startDate">
+        <input type="hidden" th:field="*{endDate}" id="endDate">
+        <button>Публикувай</button>
+    </form>
+</main>
+<footer th:replace="~{fragments/footer}"></footer>
+<script>
+    flatpickr("#dateRange", {
+        mode: "range",
+        minDate: "today",
+        dateFormat: "Y-m-d",
+
+        onChange: function (selectedDates, dateStr, instance) {
+            if (selectedDates.length === 2) {
+
+                const start = instance.formatDate(selectedDates[0], "Y-m-d");
+                const end   = instance.formatDate(selectedDates[1], "Y-m-d");
+
+                document.getElementById("startDate").value = start;
+                document.getElementById("endDate").value  = end;
+            }
+        },
+
+        onClose: function (selectedDates) {
+            if (selectedDates.length < 2) {
+                document.getElementById("startDate").value = "";
+                document.getElementById("endDate").value  = "";
+            }
+        }
+    });
+</script>
+</body>
+</html>
