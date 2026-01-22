@@ -8,6 +8,8 @@
     <div th:each="listing : ${listings}">
         <img th:src="@{'data:image/jpeg;base64,'+ ${encoder.encodeToBase64(listing.images.get(0))}}">
         <h2 th:text="${listing.title}"></h2>
+        <h3 th:text="${listing.pricePerDay}"></h3>
+        <button th:onclick="|location.href='/listings/${listing.id}'|">Виж повече</button>
     </div>
 </main>
 <footer th:replace="~{fragments/footer}"></footer>

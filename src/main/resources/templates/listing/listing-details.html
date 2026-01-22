@@ -6,7 +6,7 @@
 <main>
     <img id="currentImage" th:src="@{'data:image/jpeg;base64,'+ ${encoder.encodeToBase64(listing.images.get(0))}}">
     <h2 th:text="${listing.title}"></h2>
-    <p th:text="${listing.description}"></p>
+    <p style="white-space: pre-line" th:text="${listing.description}"></p>
     <h3 th:text="${listing.pricePerDay}"></h3>
     <p th:text="${listing.city}"></p>
 </main>
