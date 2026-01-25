@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class RentalService {
@@ -40,9 +41,8 @@ public class RentalService {
 
     private double sumPriceBetweenDates(LocalDate startDate, LocalDate endDate, double pricePerDay) {
         double totalPrice = 0;
-        for(LocalDate currentDate = startDate; currentDate.isBefore(endDate); currentDate.plusDays(1)) {
-            totalPrice += pricePerDay;
-        }
+        long daysBetween = ChronoUnit.DAYS.between(startDate, endDate) + 1;
+        totalPrice = daysBetween * pricePerDay;
         return totalPrice;
     }
 }

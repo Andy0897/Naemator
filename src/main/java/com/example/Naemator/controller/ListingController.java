@@ -32,13 +32,13 @@ public class ListingController {
         model.addAttribute("listings", listingRepository.findAll());
         model.addAttribute("encoder", new ImageEncoder());
         return "listing/listings";
-
     }
 
     @GetMapping("/{listingId}")
-    public String getShowSingleListing(@PathVariable("listingId") Long listingId, Model model) {
+    public String getShowSingleListing(@PathVariable("listingId") Long listingId, Principal principal, Model model) {
         Listing listing = listingRepository.findById(listingId).get();
         model.addAttribute("listing", listing);
+        model.addAttribute("isMine", listing.getOwner().getUsername().equals(principal.getName()));
         model.addAttribute("encoder", new ImageEncoder());
         return "listing/listing-details";
     }

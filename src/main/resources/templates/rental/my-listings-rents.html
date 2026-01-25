@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments/head}"></head>
+<body>
+<nav th:replace="~{fragments/navbar}"></nav>
+<main>
+    <h1>Наеми</h1>
+    <div th:each="rental : ${rentals}">
+        <p th:text="|Продукт: ${rental.listing.title}|"></p>
+        <p th:text="|Наемател: ${rental.renter.firstName} ${rental.renter.lastName}|"></p>
+        <p th:text="|От: ${rental.startDate}; До: ${rental.endDate}|"></p>
+    </div>
+</main>
+<footer th:replace="~{fragments/footer}"></footer>
+</body>
+</html>

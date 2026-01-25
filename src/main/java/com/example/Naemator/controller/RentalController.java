@@ -1,6 +1,9 @@
 package com.example.Naemator.controller;
 
 import com.example.Naemator.model.Rental;
+import com.example.Naemator.model.User;
+import com.example.Naemator.repository.RentalRepository;
+import com.example.Naemator.repository.UserRepository;
 import com.example.Naemator.service.RentalService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -12,14 +15,27 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/rentals")
 public class RentalController {
     RentalService rentalService;
+    RentalRepository rentalRepository;
+    UserRepository userRepository;
 
-    public RentalController(RentalService rentalService) {
+    public RentalController(RentalService rentalService, RentalRepository rentalRepository, UserRepository userRepository) {
         this.rentalService = rentalService;
+        this.rentalRepository = rentalRepository;
+        this.userRepository = userRepository;
+    }
+
+    @GetMapping("/my-listings-rents")
+    public String getMyListingsRents(Principal principal, Model model) {
+        User owner = userRepository.findByUsername(principal.getName());
+        List<Rental> rentals = rentalRepository.findAllByListingOwner(owner.getId());
+        model.addAttribute("rentals", rentals);
+        return "rental/my-listings-rents";
     }
 
     @GetMapping("/rent/{listingId}")
