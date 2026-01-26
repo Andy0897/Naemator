@@ -59,4 +59,18 @@ public class ListingService {
         listingRepository.save(listing);
         return "redirect:/listings";
     }
+
+    public String submitDeleteListing(Long listingId) {
+        Listing listing = listingRepository.findById(listingId).get();
+        listing.setListingStatus(ListingStatus.DELETED);
+        listingRepository.save(listing);
+        return "redirect:/listings";
+    }
+
+    public String submitRestoreListing(Long listingId) {
+        Listing listing = listingRepository.findById(listingId).get();
+        listing.setListingStatus(ListingStatus.AVAILABLE);
+        listingRepository.save(listing);
+        return "redirect:/listings";
+    }
 }

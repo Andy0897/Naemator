@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="~{fragments/head}"></head>
 <body>
 <nav th:replace="~{fragments/navbar}"></nav>
@@ -10,6 +10,9 @@
     <h3 th:text="${listing.pricePerDay}"></h3>
     <p th:text="${listing.city}"></p>
     <button th:if="${!isMine}" th:onclick="|location.href='/rentals/rent/${listing.id}'|">Наеми</button>
+    <form sec:authorize="hasAuthority('ADMIN')" th:action="@{/listings/submit-delete-listing/{listingId}(listingId=${listing.id})}" method="post">
+        <button type="submit">Изтрии обява</button>
+    </form>
 </main>
 <footer th:replace="~{fragments/footer}"></footer>
 </body>

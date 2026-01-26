@@ -33,8 +33,15 @@ public class UserService {
 
     public String blockUser(Long userId) {
         User user = userRepository.findById(userId).get();
-        userRepository.save(user);
         user.setEnable(false);
+        userRepository.save(user);
+        return "redirect:/";
+    }
+
+    public String unblockUser(Long userId) {
+        User user = userRepository.findById(userId).get();
+        user.setEnable(true);
+        userRepository.save(user);
         return "redirect:/";
     }
 

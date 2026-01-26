@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments/head}"></head>
+<body>
+<nav th:replace="~{fragments/navbar}"></nav>
+<main>
+    <h1>Изтрити обяви</h1>
+    <div th:each="listing : ${deletedListings}">
+        <img th:src="@{'data:image/jpeg;base64,'+ ${encoder.encodeToBase64(listing.images.get(0))}}">
+        <h2 th:text="${listing.title}"></h2>
+        <h3 th:text="${listing.pricePerDay}"></h3>
+        <form th:action="@{/listings/submit-restore-listing/{listingId}(listingId=${listing.id})}" method="post">
+            <button type="submit">Възобнови</button>
+        </form>
+    </div>
+</main>
+<footer th:replace="~{fragments/footer}"></footer>
+</body>
+</html>

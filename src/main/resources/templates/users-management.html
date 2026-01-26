@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments/head}"></head>
+<body>
+<nav th:replace="~{fragments/navbar}"></nav>
+<main>
+    <h1>Потребители</h1>
+    <div th:each="user : ${users}">
+        <p th:text="|Имена: ${user.firstName} ${user.lastName}|"></p>
+        <p th:text="|Имейл: ${user.email}|"></p>
+        <p th:text="|Роля: ${user.role}|"></p>
+        <form th:if="${user.enable}" th:action="@{/submit-block/{userId}(userId=${user.id})}" method="post">
+            <button type="submit">Блокирай</button>
+        </form>
+        <form th:if="${!user.enable}" th:action="@{/submit-unblock/{userId}(userId=${user.id})}" method="post">
+            <button type="submit">Отблокирай</button>
+        </form>
+    </div>
+</main>
+<footer th:replace="~{fragments/footer}"></footer>
+</body>
+</html>
