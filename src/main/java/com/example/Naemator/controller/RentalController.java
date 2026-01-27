@@ -30,6 +30,14 @@ public class RentalController {
         this.userRepository = userRepository;
     }
 
+    @GetMapping("/my-rents")
+    public String getMyRents(Principal principal, Model model) {
+        User renter = userRepository.findByUsername(principal.getName());
+        List<Rental> rentals = rentalRepository.findAllByRenter(renter.getId());
+        model.addAttribute("rentals", rentals);
+        return "rental/my-listings-rents";
+    }
+
     @GetMapping("/my-listings-rents")
     public String getMyListingsRents(Principal principal, Model model) {
         User owner = userRepository.findByUsername(principal.getName());

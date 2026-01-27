@@ -35,14 +35,14 @@ public class UserService {
         User user = userRepository.findById(userId).get();
         user.setEnable(false);
         userRepository.save(user);
-        return "redirect:/";
+        return "redirect:/users-management";
     }
 
     public String unblockUser(Long userId) {
         User user = userRepository.findById(userId).get();
         user.setEnable(true);
         userRepository.save(user);
-        return "redirect:/";
+        return "redirect:/users-management";
     }
 
     public boolean checkIfExistsUserByUsername(String username) {

@@ -71,6 +71,6 @@ public class ListingService {
         Listing listing = listingRepository.findById(listingId).get();
         listing.setListingStatus(ListingStatus.AVAILABLE);
         listingRepository.save(listing);
-        return "redirect:/listings";
+        return "redirect:/listings/manage-deleted-listings";
     }
 }
