@@ -50,6 +50,8 @@ public class ListingController {
         Listing listing = new Listing();
         model.addAttribute("listing", listing);
         model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("hasUploadError", false);
+        model.addAttribute("areImagesSelected", true);
         return "listing/create";
     }
 

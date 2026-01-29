@@ -1,19 +1,95 @@
 <!DOCTYPE html>
-<html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="bg"
+      xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+
 <head th:replace="~{fragments/head}"></head>
-<body>
+
+<body class="simple-bg">
 <nav th:replace="~{fragments/navbar}"></nav>
-<main>
-    <img id="currentImage" th:src="@{'data:image/jpeg;base64,'+ ${encoder.encodeToBase64(listing.images.get(0))}}">
-    <h2 th:text="${listing.title}"></h2>
-    <p style="white-space: pre-line" th:text="${listing.description}"></p>
-    <h3 th:text="${listing.pricePerDay}"></h3>
-    <p th:text="${listing.city}"></p>
-    <button th:if="${!isMine}" th:onclick="|location.href='/rentals/rent/${listing.id}'|">Наеми</button>
-    <form sec:authorize="hasAuthority('ADMIN')" th:action="@{/listings/submit-delete-listing/{listingId}(listingId=${listing.id})}" method="post">
-        <button type="submit">Изтрии обява</button>
-    </form>
+
+<main class="py-5">
+    <div class="container">
+
+        <div class="row justify-content-center g-4">
+
+            <!-- Image Section -->
+            <div class="col-12 col-lg-6">
+                <div class="card shadow-sm border-0">
+                    <img id="currentImage"
+                         class="detail-img"
+                         th:src="@{'data:image/jpeg;base64,' + ${encoder.encodeToBase64(listing.images.get(0))}}"
+                         alt="Снимка на продукта">
+                </div>
+            </div>
+
+            <!-- Info Section -->
+            <div class="col-12 col-lg-6">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body p-4">
+
+                        <!-- Title -->
+                        <h2 class="h3 mb-3" th:text="${listing.title}">
+                            Заглавие на обявата
+                        </h2>
+
+                        <!-- Price -->
+                        <h4 class="text-primary fw-semibold mb-3">
+                            <span th:text="${#numbers.formatDecimal(listing.pricePerDay, 1, 2)}"></span>
+                            лв./ден
+                        </h4>
+
+                        <!-- City -->
+                        <p class="text-muted mb-4">
+                            📍 <span th:text="${listing.city}"></span>
+                        </p>
+
+                        <!-- Description -->
+                        <h5 class="fw-semibold mb-2">Описание</h5>
+                        <p class="text-muted" style="white-space: pre-line"
+                           th:text="${listing.description}">
+                        </p>
+
+                        <hr>
+
+                        <!-- Buttons -->
+                        <div class="d-flex flex-column flex-sm-row gap-2 mt-3">
+
+                            <!-- Rent button -->
+                            <button th:if="${!isMine}"
+                                    class="btn btn-simple-primary btn-lg"
+                                    th:onclick="|location.href='/rentals/rent/${listing.id}'|">
+                                Наеми
+                            </button>
+
+                            <!-- Admin delete -->
+                            <form sec:authorize="hasAuthority('ADMIN')"
+                                  th:action="@{/listings/submit-delete-listing/{listingId}(listingId=${listing.id})}"
+                                  method="post">
+
+                                <button type="submit" class="btn btn-outline-danger btn-lg">
+                                    Изтрий обява
+                                </button>
+                            </form>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Back button -->
+        <div class="text-center mt-4">
+            <a th:href="@{/listings}" class="btn btn-outline-secondary">
+                ← Назад към всички обяви
+            </a>
+        </div>
+
+    </div>
 </main>
+
 <footer th:replace="~{fragments/footer}"></footer>
 </body>
 </html>

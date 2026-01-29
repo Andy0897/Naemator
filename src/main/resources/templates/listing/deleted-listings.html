@@ -1,19 +1,75 @@
 <!DOCTYPE html>
-<html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="bg"
+      xmlns:th="http://www.w3.org/1999/xhtml">
 <head th:replace="~{fragments/head}"></head>
-<body>
+
+<body class="simple-bg">
 <nav th:replace="~{fragments/navbar}"></nav>
-<main>
-    <h1>Изтрити обяви</h1>
-    <div th:each="listing : ${deletedListings}">
-        <img th:src="@{'data:image/jpeg;base64,'+ ${encoder.encodeToBase64(listing.images.get(0))}}">
-        <h2 th:text="${listing.title}"></h2>
-        <h3 th:text="${listing.pricePerDay}"></h3>
-        <form th:action="@{/listings/submit-restore-listing/{listingId}(listingId=${listing.id})}" method="post">
-            <button type="submit">Възобнови</button>
-        </form>
+
+<main class="py-5">
+    <div class="container">
+
+        <!-- Header -->
+        <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-2 mb-4">
+            <div>
+                <h1 class="h2 mb-1">Изтрити обяви</h1>
+                <p class="text-muted mb-0">Само администратор може да възобновява изтрити обяви.</p>
+            </div>
+
+            <div class="text-muted small">
+                Общо: <span class="fw-semibold" th:text="${#lists.size(deletedListings)}">0</span>
+            </div>
+        </div>
+
+        <!-- Empty state -->
+        <div class="alert alert-light border" th:if="${#lists.isEmpty(deletedListings)}">
+            Няма изтрити обяви в момента.
+        </div>
+
+        <!-- Grid -->
+        <div class="row g-4" th:if="${!#lists.isEmpty(deletedListings)}">
+            <div class="col-12 col-sm-6 col-lg-4" th:each="listing : ${deletedListings}">
+                <div class="card shadow-sm border-0 h-100 listing-card">
+
+                    <img class="card-img-top listing-img"
+                         th:src="@{'data:image/jpeg;base64,' + ${encoder.encodeToBase64(listing.images.get(0))}}"
+                         alt="Снимка на продукта">
+
+                    <div class="card-body d-flex flex-column">
+                        <h2 class="h5 mb-2 listing-title" th:text="${listing.title}">
+                            Заглавие
+                        </h2>
+
+                        <div class="d-flex align-items-center justify-content-between mt-auto pt-2">
+                            <span class="badge bg-light text-dark border">
+                                <span class="fw-semibold"
+                                      th:text="${#numbers.formatDecimal(listing.pricePerDay, 1, 2)}"></span>
+                                лв./ден
+                            </span>
+
+                            <form th:action="@{/listings/submit-restore-listing/{listingId}(listingId=${listing.id})}"
+                                  method="post"
+                                  class="m-0">
+                                <button type="submit" class="btn btn-success btn-sm">
+                                    Възобнови
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a th:href="@{/listings}" class="btn btn-outline-secondary">
+                ← Назад към обявите
+            </a>
+        </div>
+
     </div>
 </main>
+
 <footer th:replace="~{fragments/footer}"></footer>
 </body>
 </html>

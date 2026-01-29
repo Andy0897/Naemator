@@ -1,17 +1,71 @@
 <!DOCTYPE html>
 <html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml">
 <head th:replace="~{fragments/head}"></head>
-<body>
+<body class="simple-bg">
 <nav th:replace="~{fragments/navbar}"></nav>
-<main>
-    <h1>Обяви</h1>
-    <div th:each="listing : ${listings}">
-        <img th:src="@{'data:image/jpeg;base64,'+ ${encoder.encodeToBase64(listing.images.get(0))}}">
-        <h2 th:text="${listing.title}"></h2>
-        <h3 th:text="${listing.pricePerDay}"></h3>
-        <button th:onclick="|location.href='/listings/${listing.id}'|">Виж повече</button>
+
+<main class="py-5">
+    <div class="container">
+
+        <!-- Page header -->
+        <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-2 mb-4">
+            <div>
+                <h1 class="h2 mb-1">Обяви</h1>
+                <p class="text-muted mb-0">Разгледай наличните продукти за наем.</p>
+            </div>
+
+            <!-- Optional: simple count -->
+            <div class="text-muted small">
+                Общо: <span class="fw-semibold" th:text="${#lists.size(listings)}">0</span>
+            </div>
+        </div>
+
+        <!-- Empty state -->
+        <div class="alert alert-light border" th:if="${#lists.isEmpty(listings)}">
+            Няма налични обяви в момента.
+        </div>
+
+        <!-- Listings grid -->
+        <div class="row g-4" th:if="${!#lists.isEmpty(listings)}">
+            <div class="col-12 col-sm-6 col-lg-4" th:each="listing : ${listings}">
+                <div class="card shadow-sm border-0 h-100 listing-card">
+
+                    <!-- Image -->
+                    <a class="text-decoration-none" th:href="@{/listings/{id}(id=${listing.id})}">
+                        <img class="card-img-top listing-img"
+                             th:src="@{'data:image/jpeg;base64,' + ${encoder.encodeToBase64(listing.images.get(0))}}"
+                             alt="Снимка на продукта">
+                    </a>
+
+                    <div class="card-body d-flex flex-column">
+                        <!-- Title -->
+                        <h2 class="h5 mb-2 listing-title" th:text="${listing.title}">
+                            Заглавие на обява
+                        </h2>
+
+                        <!-- Price -->
+                        <div class="d-flex align-items-center justify-content-between mt-auto pt-2">
+                            <span class="badge bg-light text-dark border">
+                                <span class="fw-semibold"
+                                      th:text="${#numbers.formatDecimal(listing.pricePerDay, 1, 2)}">
+                                </span>
+                                лв./ден
+                            </span>
+
+                            <a class="btn btn-simple-primary btn-sm"
+                               th:href="@{/listings/{id}(id=${listing.id})}">
+                                Виж повече
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 </main>
+
 <footer th:replace="~{fragments/footer}"></footer>
 </body>
 </html>

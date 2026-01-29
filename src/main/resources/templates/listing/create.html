@@ -1,40 +1,135 @@
 <!DOCTYPE html>
 <html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml">
 <head th:replace="~{fragments/head}"></head>
-<body>
+<body class="simple-bg">
 <nav th:replace="~{fragments/navbar}"></nav>
-<main>
-    <h1>Публикуване на обява</h1>
-    <form th:action="@{/listings/submit}" method="post" th:object="${listing}" enctype="multipart/form-data">
-        <div>
-            <label>Снимки</label>
-            <input type="file" name="images" multiple>
+
+<main class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+
+                <div class="mb-4 text-center">
+                    <h1 class="h2 mb-2">Публикуване на обява</h1>
+                    <p class="text-muted mb-0">Добави снимки и информация за продукта, който даваш под наем.</p>
+                </div>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4 p-md-5">
+
+                        <form th:action="@{/listings/submit}"
+                              method="post"
+                              th:object="${listing}"
+                              enctype="multipart/form-data">
+
+                            <!-- Images -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Снимки *</label>
+                                <input class="form-control" type="file" name="images" multiple accept="image/*">
+
+                                <div th:if="${hasUploadError}" class="text-danger small mt-2 mb-0" role="alert">
+                                    Възникна грешка при качването.
+                                </div>
+
+                                <div th:if="${!areImagesSelected}" class="text-danger small mt-2 mb-0" role="alert">
+                                    Полето не може да бъде празно.
+                                </div>
+
+                                <div class="form-text">Можеш да качиш повече от една снимка.</div>
+                            </div>
+
+                            <div class="row g-3">
+                                <!-- Title -->
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Заглавие *</label>
+                                    <input th:field="*{title}" class="form-control" placeholder="Напр. Перфоратор Bosch">
+                                    <div class="mt-1">
+                                        <div class="text-danger small"
+                                             th:each="error : ${#fields.errors('title')}"
+                                             th:text="${error}"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Description -->
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Описание *</label>
+                                    <textarea rows="4"
+                                              th:field="*{description}"
+                                              class="form-control"
+                                              placeholder="Състояние, какво е включено, условия за наем..."></textarea>
+                                    <div class="mt-1">
+                                        <div class="text-danger small"
+                                             th:each="error : ${#fields.errors('description')}"
+                                             th:text="${error}"></div>
+                                    </div>
+                                </div>
+
+                                <!-- City -->
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label fw-semibold">Град или село *</label>
+                                    <input th:field="*{city}" class="form-control" placeholder="Напр. София">
+                                    <div class="mt-1">
+                                        <div class="text-danger small"
+                                             th:each="error : ${#fields.errors('city')}"
+                                             th:text="${error}"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Price -->
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label fw-semibold">Цена за ден (лв.) *</label>
+                                    <input type="number"
+                                           min="0"
+                                           step="any"
+                                           th:field="*{pricePerDay}"
+                                           class="form-control"
+                                           placeholder="Напр. 15">
+                                    <div class="mt-1">
+                                        <div class="text-danger small"
+                                             th:each="error : ${#fields.errors('pricePerDay')}"
+                                             th:text="${error}"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Category -->
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Категория *</label>
+                                    <select th:field="*{category}" class="form-select">
+                                        <option value="" disabled selected>Избери категория</option>
+                                        <option th:each="category : ${categories}"
+                                                th:value="${category.id}"
+                                                th:text="${category.name}"></option>
+                                    </select>
+                                </div>
+
+                                <!-- Buttons -->
+                                <div class="col-12 d-flex flex-column flex-sm-row gap-2 mt-3">
+                                    <button type="submit" class="btn btn-simple-primary btn-lg">
+                                        Публикувай
+                                    </button>
+                                    <a th:href="@{/listings}" class="btn btn-outline-secondary btn-lg">
+                                        Отказ
+                                    </a>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="small text-muted mt-2">* Задължителни полета</div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4 small text-muted">
+                    Съвет: по-добри снимки = повече интерес към обявата 🙂
+                </div>
+
+            </div>
         </div>
-        <div>
-            <label>Заглавие</label>
-            <input th:field="*{title}">
-        </div>
-        <div>
-            <label>Описание</label>
-            <textarea rows="4" th:field="*{description}"></textarea>
-        </div>
-        <div>
-            <label>Град или село</label>
-            <input th:field="*{city}">
-        </div>
-        <div>
-            <label>Цена за ден</label>
-            <input type="number" step="any" th:field="*{pricePerDay}">
-        </div>
-        <div>
-            <label>Категория</label>
-            <select th:field="*{category}">
-                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
-            </select>
-        </div>
-        <button>Публикувай</button>
-    </form>
+    </div>
 </main>
+
 <footer th:replace="~{fragments/footer}"></footer>
 </body>
 </html>
