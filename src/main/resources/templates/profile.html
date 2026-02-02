@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments/head}"></head>
+
+<body class="simple-bg">
+<nav th:replace="~{fragments/navbar}"></nav>
+
+<main class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-7">
+
+                <div class="text-center mb-4">
+                    <h1 class="h2 mb-2">Моят профил</h1>
+                    <p class="text-muted mb-0">Тук можеш да видиш и редактираш данните си.</p>
+                </div>
+
+                <!-- Optional success message -->
+                <div th:if="${profileUpdated}" class="alert alert-success text-center" role="alert">
+                    Профилът е обновен успешно.
+                </div>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4 p-md-5">
+
+                        <!-- Top info -->
+                        <!-- Top info -->
+                        <div class="d-flex align-items-center gap-3 mb-4">
+                            <div class="flex-grow-1">
+                                <div class="fw-semibold fs-5"
+                                     th:text="|${user.firstName} ${user.lastName}|">
+                                    Име Фамилия
+                                </div>
+
+                                <div class="text-muted small">
+                                    Потребителско име:
+                                    <span class="fw-semibold" th:text="${user.username}">username</span>
+                                </div>
+
+                                <div class="text-muted small">
+                                    Роля:
+                                    <span class="badge bg-light text-dark border" th:text="${user.role}">USER</span>
+
+                                    <span class="ms-2"
+                                          th:if="${user.enable}"
+                                          title="Активен профил">✅ Активен</span>
+
+                                    <span class="ms-2"
+                                          th:if="${!user.enable}"
+                                          title="Блокиран профил">⛔ Блокиран</span>
+                                </div>
+
+                                <!-- Buttons -->
+                                <div sec:authorize="hasAuthority('USER')" class="mt-3 d-flex flex-column flex-sm-row gap-2">
+                                    <a th:href="@{/listings/my-listings}"
+                                       class="btn btn-outline-primary">
+                                        Моите обяви
+                                    </a>
+
+                                    <a th:href="@{/rentals/my-rentals}"
+                                       class="btn btn-outline-secondary">
+                                        Моите наеми
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <!-- Edit form -->
+                        <form th:action="@{/submit}" method="post" th:object="${user}">
+                            <!-- Keep id + username hidden if you need them on submit -->
+                            <input type="hidden" th:field="*{id}">
+                            <input type="hidden" th:field="*{username}">
+                            <input type="hidden" th:field="*{password}">
+                            <input type="hidden" th:field="*{role}">
+                            <input type="hidden" th:field="*{enable}">
+
+                            <div class="row g-3">
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label fw-semibold">Име</label>
+                                    <input type="text" th:field="*{firstName}" class="form-control">
+                                    <div class="mt-1">
+                                        <div class="text-danger small"
+                                             th:each="error : ${#fields.errors('firstName')}"
+                                             th:text="${error}"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label fw-semibold">Фамилия</label>
+                                    <input type="text" th:field="*{lastName}" class="form-control">
+                                    <div class="mt-1">
+                                        <div class="text-danger small"
+                                             th:each="error : ${#fields.errors('lastName')}"
+                                             th:text="${error}"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Имейл</label>
+                                    <input type="email" th:field="*{email}" class="form-control">
+                                    <div class="mt-1">
+                                        <div class="text-danger small"
+                                             th:each="error : ${#fields.errors('email')}"
+                                             th:text="${error}"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 d-flex flex-column flex-sm-row gap-2 mt-2">
+                                    <button type="submit" class="btn btn-simple-primary btn-lg">
+                                        Запази промените
+                                    </button>
+
+                                    <a th:href="@{/}" class="btn btn-outline-secondary btn-lg">
+                                        Назад
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+                <div class="text-center mt-4 small text-muted">
+                    Съвет: използвай реален имейл, за да можеш да получаваш известия.
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer}"></footer>
+</body>
+</html>

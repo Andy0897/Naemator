@@ -21,6 +21,22 @@
                          th:src="@{'data:image/jpeg;base64,' + ${encoder.encodeToBase64(listing.images.get(0))}}"
                          alt="Снимка на продукта">
                 </div>
+
+                <!-- Thumbnails -->
+                <div class="mt-3" th:if="${listing.images != null and #lists.size(listing.images) > 1}">
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button type="button"
+                                class="thumb-btn"
+                                th:each="img, iter : ${listing.images}"
+                                th:attr="data-img=@{'data:image/jpeg;base64,' + ${encoder.encodeToBase64(img)}}"
+                                th:classappend="${iter.index == 0} ? ' is-active' : ''"
+                                aria-label="Смени снимка">
+                            <img class="thumb-img"
+                                 th:src="@{'data:image/jpeg;base64,' + ${encoder.encodeToBase64(img)}}"
+                                 alt="Миниатюра">
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <!-- Info Section -->
@@ -29,9 +45,7 @@
                     <div class="card-body p-4">
 
                         <!-- Title -->
-                        <h2 class="h3 mb-3" th:text="${listing.title}">
-                            Заглавие на обявата
-                        </h2>
+                        <h2 class="h3 mb-3" th:text="${listing.title}">Заглавие на обявата</h2>
 
                         <!-- Price -->
                         <h4 class="text-primary fw-semibold mb-3">
@@ -46,9 +60,7 @@
 
                         <!-- Description -->
                         <h5 class="fw-semibold mb-2">Описание</h5>
-                        <p class="text-muted" style="white-space: pre-line"
-                           th:text="${listing.description}">
-                        </p>
+                        <p class="text-muted" style="white-space: pre-line" th:text="${listing.description}"></p>
 
                         <hr>
 
@@ -62,11 +74,19 @@
                                 Наеми
                             </button>
 
+                            <!-- Owner delete -->
+                            <form th:if="${isMine}"
+                                  th:action="@{/listings/submit-delete-listing/{listingId}(listingId=${listing.id})}"
+                                  method="post">
+                                <button type="submit" class="btn btn-outline-danger btn-lg">
+                                    Изтрий обява
+                                </button>
+                            </form>
+
                             <!-- Admin delete -->
                             <form sec:authorize="hasAuthority('ADMIN')"
                                   th:action="@{/listings/submit-delete-listing/{listingId}(listingId=${listing.id})}"
                                   method="post">
-
                                 <button type="submit" class="btn btn-outline-danger btn-lg">
                                     Изтрий обява
                                 </button>
@@ -91,5 +111,26 @@
 </main>
 
 <footer th:replace="~{fragments/footer}"></footer>
+
+<script>
+    // Thumbnail click => change main image
+    document.addEventListener("DOMContentLoaded", () => {
+        const main = document.getElementById("currentImage");
+        const thumbs = document.querySelectorAll(".thumb-btn");
+
+        thumbs.forEach(btn => {
+            btn.addEventListener("click", () => {
+                const img = btn.getAttribute("data-img");
+                if (!img) return;
+
+                main.src = img;
+
+                thumbs.forEach(b => b.classList.remove("is-active"));
+                btn.classList.add("is-active");
+            });
+        });
+    });
+</script>
+
 </body>
 </html>

@@ -26,7 +26,9 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/home", "/access-denied").permitAll()
-                        .requestMatchers("/login", "/register", "/submit").anonymous()
+                        .requestMatchers("/login", "/register", "/submit-create").anonymous()
+                        .requestMatchers("/listings/create", "/listings/submit", "/rentals/my-rents", "/rentals/my-listings-rents", "/rentals/rent/**", "/rentals/submit-rent/**", "/rentals/api/get-busy-dates-for-listing/**").hasAuthority("USER")
+                        .requestMatchers("/users-management", "/submit-block/**", "/submit-unblock/**", "/listings/manage-deleted-listings", "/listings/submit-restore-listing/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form

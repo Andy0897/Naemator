@@ -1,22 +1,146 @@
 <!DOCTYPE html>
 <html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml">
 <head th:replace="~{fragments/head}"></head>
-<body>
+
+<body class="simple-bg">
 <nav th:replace="~{fragments/navbar}"></nav>
-<main>
-    <h1>Потребители</h1>
-    <div th:each="user : ${users}">
-        <p th:text="|Имена: ${user.firstName} ${user.lastName}|"></p>
-        <p th:text="|Имейл: ${user.email}|"></p>
-        <p th:text="|Роля: ${user.role}|"></p>
-        <form th:if="${user.enable}" th:action="@{/submit-block/{userId}(userId=${user.id})}" method="post">
-            <button type="submit">Блокирай</button>
-        </form>
-        <form th:if="${!user.enable}" th:action="@{/submit-unblock/{userId}(userId=${user.id})}" method="post">
-            <button type="submit">Отблокирай</button>
-        </form>
+
+<main class="py-5">
+    <div class="container">
+
+        <!-- Header -->
+        <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-2 mb-4">
+            <div>
+                <h1 class="h2 mb-1">Потребители</h1>
+                <p class="text-muted mb-0">Администраторът може да блокира или отблокира акаунти.</p>
+            </div>
+
+            <div class="text-muted small">
+                Общо: <span class="fw-semibold" th:text="${#lists.size(users)}">0</span>
+            </div>
+        </div>
+
+        <!-- Empty state -->
+        <div class="alert alert-light border" th:if="${#lists.isEmpty(users)}">
+            Няма регистрирани потребители.
+        </div>
+
+        <!-- Desktop table -->
+        <div class="card shadow-sm border-0 d-none d-md-block" th:if="${!#lists.isEmpty(users)}">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-light">
+                        <tr>
+                            <th class="ps-3">Имена</th>
+                            <th>Имейл</th>
+                            <th>Роля</th>
+                            <th class="text-end pe-3">Действие</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:each="user : ${users}">
+                            <td class="ps-3 fw-semibold"
+                                th:text="|${user.firstName} ${user.lastName}|">
+                                Име Фамилия
+                            </td>
+
+                            <td th:text="${user.email}">
+                                example@email.com
+                            </td>
+
+                            <td>
+                                <span class="badge bg-light text-dark border"
+                                      th:text="${user.role}">
+                                    USER
+                                </span>
+                            </td>
+
+                            <td class="text-end pe-3">
+
+                                <!-- Block -->
+                                <form th:if="${user.enable}"
+                                      th:action="@{/submit-block/{userId}(userId=${user.id})}"
+                                      method="post"
+                                      class="d-inline">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        Блокирай
+                                    </button>
+                                </form>
+
+                                <!-- Unblock -->
+                                <form th:if="${!user.enable}"
+                                      th:action="@{/submit-unblock/{userId}(userId=${user.id})}"
+                                      method="post"
+                                      class="d-inline">
+                                    <button type="submit" class="btn btn-outline-success btn-sm">
+                                        Отблокирай
+                                    </button>
+                                </form>
+
+                            </td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile cards -->
+        <div class="d-md-none" th:if="${!#lists.isEmpty(users)}">
+            <div class="card shadow-sm border-0 mb-3" th:each="user : ${users}">
+                <div class="card-body">
+
+                    <div class="fw-semibold mb-1"
+                         th:text="|${user.firstName} ${user.lastName}|">
+                        Име Фамилия
+                    </div>
+
+                    <div class="text-muted small mb-2"
+                         th:text="${user.email}">
+                        email@email.com
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="badge bg-light text-dark border"
+                              th:text="${user.role}">
+                            USER
+                        </span>
+                    </div>
+
+                    <!-- Actions -->
+                    <form th:if="${user.enable}"
+                          th:action="@{/submit-block/{userId}(userId=${user.id})}"
+                          method="post">
+                        <button type="submit" class="btn btn-outline-danger w-100">
+                            Блокирай
+                        </button>
+                    </form>
+
+                    <form th:if="${!user.enable}"
+                          th:action="@{/submit-unblock/{userId}(userId=${user.id})}"
+                          method="post">
+                        <button type="submit" class="btn btn-outline-success w-100">
+                            Отблокирай
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Back button -->
+        <div class="text-center mt-4">
+            <a th:href="@{/}" class="btn btn-outline-secondary">
+                ← Назад към началото
+            </a>
+        </div>
+
     </div>
 </main>
+
 <footer th:replace="~{fragments/footer}"></footer>
 </body>
 </html>

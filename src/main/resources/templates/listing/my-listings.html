@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments/head}"></head>
+
+<body class="simple-bg">
+<nav th:replace="~{fragments/navbar}"></nav>
+
+<main class="py-5">
+    <div class="container">
+
+        <!-- Header -->
+        <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-2 mb-4">
+            <div>
+                <h1 class="h2 mb-1">Моите обяви</h1>
+                <p class="text-muted mb-0">
+                    Тук са продуктите, които си публикувал.
+                </p>
+            </div>
+
+            <a th:href="@{/listings/create}" class="btn btn-simple-primary">
+                + Нова обява
+            </a>
+        </div>
+
+        <!-- Empty state -->
+        <div class="alert alert-light border" th:if="${#lists.isEmpty(listings)}">
+            Все още нямаш публикувани обяви.
+        </div>
+
+        <!-- Listings grid -->
+        <div class="row g-4" th:if="${!#lists.isEmpty(listings)}">
+
+            <div class="col-12 col-sm-6 col-lg-4" th:each="listing : ${listings}">
+                <div class="card shadow-sm border-0 h-100 listing-card">
+
+                    <!-- Listing image -->
+                    <a th:href="@{/listings/{id}(id=${listing.id})}">
+                        <img class="card-img-top listing-img"
+                             th:src="@{'data:image/jpeg;base64,' + ${encoder.encodeToBase64(listing.images.get(0))}}"
+                             alt="Снимка">
+                    </a>
+
+                    <div class="card-body d-flex flex-column">
+
+                        <!-- Title -->
+                        <h2 class="h5 mb-1 listing-title"
+                            th:text="${listing.title}">
+                            Заглавие
+                        </h2>
+
+                        <!-- City -->
+                        <p class="text-muted small mb-2">
+                            📍 <span th:text="${listing.city}"></span>
+                        </p>
+
+                        <!-- Status -->
+                        <div class="mb-3">
+                            <span class="badge bg-light text-dark border"
+                                  th:text="${listing.listingStatus}">
+                                ACTIVE
+                            </span>
+                        </div>
+
+                        <!-- Price + actions -->
+                        <div class="mt-auto d-flex align-items-center justify-content-between">
+
+                            <span class="badge bg-light text-dark border">
+                                <span class="fw-semibold"
+                                      th:text="${#numbers.formatDecimal(listing.pricePerDay, 1, 2)}"></span>
+                                лв./ден
+                            </span>
+
+                            <a th:href="@{/listings/{id}(id=${listing.id})}"
+                               class="btn btn-outline-secondary btn-sm">
+                                Виж
+                            </a>
+
+                        </div>
+
+                        <!-- Delete button -->
+                        <form th:action="@{/listings/submit-delete-listing/{listingId}(listingId=${listing.id})}"
+                              method="post"
+                              class="mt-3">
+                            <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                                Изтрий обявата
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Back -->
+        <div class="text-center mt-5">
+            <a th:href="@{/listings}" class="btn btn-outline-secondary">
+                ← Всички обяви
+            </a>
+        </div>
+
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer}"></footer>
+</body>
+</html>

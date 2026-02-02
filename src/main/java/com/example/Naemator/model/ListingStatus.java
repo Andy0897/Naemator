@@ -2,5 +2,6 @@ package com.example.Naemator.model;
 
 public enum ListingStatus {
     AVAILABLE,
-    DELETED
+    DELETED_BY_ADMIN,
+    DELETED_BY_OWNER
 }

@@ -1,1 +1,40 @@
-<footer>footer</footer>
+<footer class="bg-white border-top mt-auto" xmlns:th="http://www.w3.org/1999/xhtml"
+        xmlns:sec="http://www.w3.org/1999/xhtml">
+    <div class="container py-4">
+
+        <div class="row align-items-center gy-3">
+
+            <!-- Left: Project name -->
+            <div class="col-12 col-md-6 text-center text-md-start">
+                <span class="fw-semibold">Naemator</span>
+                <span class="text-muted small">
+                    – платформа за наемане на продукти
+                </span>
+            </div>
+
+            <!-- Right: Links -->
+            <div class="col-12 col-md-6 text-center text-md-end">
+                <a th:href="@{/}" class="text-decoration-none text-muted small me-3">
+                    Начало
+                </a>
+
+                <a th:href="@{/listings}" class="text-decoration-none text-muted small me-3">
+                    Обяви
+                </a>
+
+                <a th:href="@{/register}" sec:authorize="isAnonymous" class="text-decoration-none text-muted small">
+                    Регистрация
+                </a>
+            </div>
+        </div>
+
+        <hr class="my-3">
+
+        <!-- Bottom text -->
+        <div class="text-center text-muted small">
+            © <span th:text="${#dates.year(#dates.createNow())}"></span>
+            Naemator – All rights received
+        </div>
+
+    </div>
+</footer>

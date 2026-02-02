@@ -12,6 +12,9 @@ import org.springframework.validation.BindingResult;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RentalService {
@@ -44,5 +47,18 @@ public class RentalService {
         long daysBetween = ChronoUnit.DAYS.between(startDate, endDate) + 1;
         totalPrice = daysBetween * pricePerDay;
         return totalPrice;
+    }
+
+    public List<LocalDate> getBusyDatesForListing(Long listingId) {
+        List<Rental> rentals = rentalRepository.findAllByListingId(listingId);
+        List<LocalDate> busyDates = new ArrayList<>();
+        for (Rental rental : rentals) {
+            LocalDate startDate = rental.getStartDate();
+            LocalDate endDate = rental.getEndDate().plusDays(1);
+            List<LocalDate> rentalDates = startDate.datesUntil(endDate).collect(Collectors.toList());
+            busyDates.addAll(rentalDates);
+            rentalDates.forEach(System.out::println);
+        }
+        return busyDates;
     }
 }

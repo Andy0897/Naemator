@@ -1,53 +1,149 @@
 <!DOCTYPE html>
 <html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml">
 <head th:replace="~{fragments/head}"></head>
-<body>
+
+<body class="simple-bg">
 <nav th:replace="~{fragments/navbar}"></nav>
-<main>
-    <h1>Наемане на обява</h1>
-    <form th:action="@{/rentals/submit-rent/{listingId}(listingId=${listingId})}" method="post" th:object="${rental}">
-        <div>
-            <label>Град или село</label>
-            <input th:field="*{city}">
+
+<main class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-7">
+
+                <div class="mb-4 text-center">
+                    <h1 class="h2 mb-2">Наемане на обява</h1>
+                    <p class="text-muted mb-0">Попълни адрес и избери период. Заетите дати не могат да се избират.</p>
+                </div>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4 p-md-5">
+
+                        <form th:action="@{/rentals/submit-rent/{listingId}(listingId=${listingId})}"
+                              method="post"
+                              th:object="${rental}">
+
+                            <div class="row g-3">
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label fw-semibold">Град или село</label>
+                                    <input th:field="*{city}" class="form-control" placeholder="Напр. София">
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label fw-semibold">Адрес</label>
+                                    <input th:field="*{address}" class="form-control" placeholder="ул. ..., № ...">
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Период</label>
+                                    <input type="text"
+                                           id="dateRange"
+                                           class="form-control"
+                                           placeholder="Избери период"
+                                           autocomplete="off">
+                                    <div class="form-text">
+                                        Избери начална и крайна дата. Заетите дни са блокирани.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <input type="hidden" th:field="*{startDate}" id="startDate">
+                            <input type="hidden" th:field="*{endDate}" id="endDate">
+
+                            <div class="d-flex flex-column flex-sm-row gap-2 mt-4">
+                                <button type="submit" class="btn btn-simple-primary btn-lg">
+                                    Потвърди наемането
+                                </button>
+                                <a th:href="@{/listings/{id}(id=${listingId})}" class="btn btn-outline-secondary btn-lg">
+                                    Отказ
+                                </a>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+                <div class="text-center mt-4 small text-muted">
+                    Ако не можеш да избереш период, значи датите са заети или невалидни.
+                </div>
+
+            </div>
         </div>
-        <div>
-            <label>Адрес</label>
-            <input th:field="*{address}">
-        </div>
-        <div>
-            <label class="form-label">Период</label>
-            <input type="text" id="dateRange" placeholder="Избери период">
-        </div>
-        <input type="hidden" th:field="*{startDate}" id="startDate">
-        <input type="hidden" th:field="*{endDate}" id="endDate">
-        <button>Публикувай</button>
-    </form>
+    </div>
 </main>
+
 <footer th:replace="~{fragments/footer}"></footer>
-<script>
-    flatpickr("#dateRange", {
-        mode: "range",
-        minDate: "today",
-        dateFormat: "Y-m-d",
 
-        onChange: function (selectedDates, dateStr, instance) {
-            if (selectedDates.length === 2) {
+<script th:inline="javascript">
+    // listingId from thymeleaf
+    const listingId = [[${listingId}]];
 
-                const start = instance.formatDate(selectedDates[0], "Y-m-d");
-                const end   = instance.formatDate(selectedDates[1], "Y-m-d");
+    // API endpoint
+    const apiUrl = `/rentals/api/get-busy-dates-for-listing/${listingId}`;
 
-                document.getElementById("startDate").value = start;
-                document.getElementById("endDate").value  = end;
-            }
-        },
+    // Init flatpickr after we fetch busy dates
+    fetch(apiUrl)
+        .then(res => {
+            if (!res.ok) throw new Error("Грешка при зареждане на заети дати");
+            return res.json();
+        })
+        .then(unavailableDates => {
+            // unavailableDates should be like: ["2026-01-10","2026-01-11",...]
+            flatpickr("#dateRange", {
+                mode: "range",
+                minDate: "today",
+                dateFormat: "Y-m-d",
 
-        onClose: function (selectedDates) {
-            if (selectedDates.length < 2) {
-                document.getElementById("startDate").value = "";
-                document.getElementById("endDate").value  = "";
-            }
-        }
-    });
+                disable: unavailableDates,
+
+                onChange: function (selectedDates, dateStr, instance) {
+                    if (selectedDates.length === 2) {
+                        const start = instance.formatDate(selectedDates[0], "Y-m-d");
+                        const end   = instance.formatDate(selectedDates[1], "Y-m-d");
+
+                        document.getElementById("startDate").value = start;
+                        document.getElementById("endDate").value  = end;
+                    }
+                },
+
+                onClose: function (selectedDates) {
+                    if (selectedDates.length < 2) {
+                        document.getElementById("startDate").value = "";
+                        document.getElementById("endDate").value  = "";
+                    }
+                }
+            });
+        })
+        .catch(err => {
+            // Fallback: allow picking dates, but show message
+            console.error(err);
+
+            flatpickr("#dateRange", {
+                mode: "range",
+                minDate: "today",
+                dateFormat: "Y-m-d",
+                onChange: function (selectedDates, dateStr, instance) {
+                    if (selectedDates.length === 2) {
+                        const start = instance.formatDate(selectedDates[0], "Y-m-d");
+                        const end   = instance.formatDate(selectedDates[1], "Y-m-d");
+                        document.getElementById("startDate").value = start;
+                        document.getElementById("endDate").value  = end;
+                    }
+                },
+                onClose: function (selectedDates) {
+                    if (selectedDates.length < 2) {
+                        document.getElementById("startDate").value = "";
+                        document.getElementById("endDate").value  = "";
+                    }
+                }
+            });
+
+            // Small user message
+            const help = document.createElement("div");
+            help.className = "alert alert-warning mt-3";
+            help.textContent = "Не успяхме да заредим заетите дати. Може да избереш период, но проверката ще е на сървъра.";
+            document.querySelector(".card-body").appendChild(help);
+        });
 </script>
+
 </body>
 </html>

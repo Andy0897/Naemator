@@ -1,29 +1,81 @@
 <!DOCTYPE html>
 <html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml">
 <head th:replace="~{fragments/head}"></head>
-<body>
+
+<body class="simple-bg">
 <nav th:replace="~{fragments/navbar}"></nav>
-<main>
-    <h2>Вход</h2>
-    <div th:if="${param.error}">
-        Невалидно потребителско име или парола
-    </div>
-    <div th:if="${param.logout}">
-        Излязохте успешно от профила си
-    </div>
-    <form th:action="@{/login}" method="post">
-        <div>
-            <label>Потребителско име или имейл</label>
-            <input type="text" name="usernameOrEmail" placeholder="Въведете потребителско име">
+
+<main class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-5">
+
+                <div class="text-center mb-4">
+                    <h2 class="h3 mb-2">Вход</h2>
+                    <p class="text-muted mb-0">Влез в профила си, за да наемаш и публикуваш обяви.</p>
+                </div>
+
+                <!-- Alerts -->
+                <div th:if="${param.error}" class="alert alert-danger text-center" role="alert">
+                    Невалидно потребителско име или парола.
+                </div>
+
+                <div th:if="${param.logout}" class="alert alert-success text-center" role="alert">
+                    Излязохте успешно от профила си.
+                </div>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4 p-md-5">
+
+                        <form th:action="@{/login}" method="post">
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">
+                                    Потребителско име или имейл
+                                </label>
+                                <input type="text"
+                                       name="usernameOrEmail"
+                                       class="form-control"
+                                       placeholder="Въведете потребителско име или имейл"
+                                       required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">
+                                    Парола
+                                </label>
+                                <input type="password"
+                                       name="password"
+                                       class="form-control"
+                                       placeholder="Въведете парола"
+                                       required>
+                            </div>
+
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-simple-primary btn-lg">
+                                    Вход
+                                </button>
+                            </div>
+
+                            <div class="text-center mt-3">
+                                <p class="mb-0 text-muted">
+                                    Нямаш акаунт?
+                                    <a th:href="@{/register}" class="text-decoration-none">
+                                        Регистрирай се
+                                    </a>
+                                </p>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
         </div>
-        <div>
-            <label>Парола</label>
-            <input type="password" name="password" placeholder="Въведете парола">
-        </div>
-        <button type="submit">Вход</button>
-        <p>Нямаш акаунт? <a href="/register">Регистрирай се</a></p>
-    </form>
+    </div>
 </main>
+
 <footer th:replace="~{fragments/footer}"></footer>
 </body>
 </html>

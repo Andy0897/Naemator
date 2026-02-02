@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments/head}"></head>
+
+<body class="simple-bg">
+<nav th:replace="~{fragments/navbar}"></nav>
+
+<main class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+
+                <div class="card shadow-sm border-0 text-center">
+                    <div class="card-body p-5">
+
+                        <h1 class="display-6 mb-3 text-danger">Достъп отказан</h1>
+
+                        <p class="text-muted fs-5 mb-4">
+                            Нямате необходимите права, за да отворите тази страница.
+                        </p>
+
+                        <div class="alert alert-light border mb-4">
+                            Ако смятате, че това е грешка, свържете се с администратора.
+                        </div>
+
+                        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                            <a th:href="@{/}" class="btn btn-simple-primary btn-lg px-4">
+                                Към началната страница
+                            </a>
+
+                            <a th:href="@{/listings}" class="btn btn-outline-secondary btn-lg px-4">
+                                Обяви
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="text-center mt-4 small text-muted">
+                    Грешка 403 – Access Denied
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer}"></footer>
+</body>
+</html>

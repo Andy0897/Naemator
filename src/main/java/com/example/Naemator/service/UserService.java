@@ -17,7 +17,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public String submitUser(User user, BindingResult bindingResult, Model model) {
+    public String submitCreateUser(User user, BindingResult bindingResult, Model model) {
         if(bindingResult.hasErrors() || checkIfExistsUserByUsername(user.getUsername()) || checkIfExistsUserByEmail(user.getEmail())) {
             model.addAttribute("user", user);
             model.addAttribute("existsUserByUsername", checkIfExistsUserByUsername(user.getUsername()));
@@ -27,6 +27,15 @@ public class UserService {
         user.setEnable(true);
         user.setRole("USER");
         user.setPassword(encoder.encode(user.getPassword()));
+        userRepository.save(user);
+        return "redirect:/login";
+    }
+
+    public String submitEditUser(User user, BindingResult bindingResult, Model model) {
+        if(bindingResult.hasFieldErrors("firstName") || bindingResult.hasFieldErrors("lastName")) {
+            model.addAttribute("user", user);
+            return "profile";
+        }
         userRepository.save(user);
         return "redirect:/login";
     }

@@ -11,8 +11,8 @@
         <!-- Header -->
         <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-2 mb-4">
             <div>
-                <h1 class="h2 mb-1">Наеми на моите обяви</h1>
-                <p class="text-muted mb-0">Тук виждаш кой е наел продуктите ти и за какъв период.</p>
+                <h1 class="h2 mb-1">Моите наеми</h1>
+                <p class="text-muted mb-0">Тук са продуктите, които си наел и периодът на наемане.</p>
             </div>
 
             <div class="text-muted small">
@@ -22,7 +22,7 @@
 
         <!-- Empty state -->
         <div class="alert alert-light border" th:if="${#lists.isEmpty(rentals)}">
-            Няма наеми за твоите обяви в момента.
+            Нямаш активни или минали наеми в момента.
         </div>
 
         <!-- Desktop table -->
@@ -33,20 +33,18 @@
                         <thead class="table-light">
                         <tr>
                             <th class="ps-3">Продукт</th>
-                            <th>Наемател</th>
                             <th>Период</th>
-                            <th>Адрес</th>
                             <th class="text-end pe-3">Сума</th>
                         </tr>
                         </thead>
 
                         <tbody>
                         <tr th:each="rental : ${rentals}">
-                            <!-- Product column with image + link -->
+                            <!-- Product with image + link -->
                             <td class="ps-3">
                                 <div class="d-flex gap-3 align-items-center">
                                     <img class="rounded border"
-                                         s                                         style="width:56px;height:56px;object-fit:cover;"
+                                         style="width:56px;height:56px;object-fit:cover;"
                                          th:src="@{'data:image/jpeg;base64,' + ${encoder.encodeToBase64(rental.listing.images.get(0))}}"
                                          alt="Снимка">
 
@@ -56,27 +54,15 @@
                                            th:text="${rental.listing.title}">
                                             Продукт
                                         </a>
-
                                         <div class="text-muted small">
                                             Обява № <span th:text="${rental.listing.id}">0</span>
                                             • Наем № <span th:text="${rental.id}">0</span>
                                         </div>
-
-                                        <a class="small text-muted text-decoration-none"
-                                           th:href="@{/listings/{id}(id=${rental.listing.id})}">
-                                            Виж обявата →
-                                        </a>
                                     </div>
                                 </div>
                             </td>
 
-                            <td>
-                                <div class="fw-semibold"
-                                     th:text="|${rental.renter.firstName} ${rental.renter.lastName}|">
-                                    Име Фамилия
-                                </div>
-                            </td>
-
+                            <!-- Period -->
                             <td>
                                 <div class="small">
                                     <span class="text-muted">От:</span>
@@ -88,15 +74,7 @@
                                 </div>
                             </td>
 
-                            <td>
-                                <div class="small">
-                                    <span class="fw-semibold" th:text="${rental.city}">Град</span>
-                                </div>
-                                <div class="text-muted small" th:text="${rental.address}">
-                                    Адрес
-                                </div>
-                            </td>
-
+                            <!-- Total price -->
                             <td class="text-end pe-3">
                                 <span class="fw-semibold"
                                       th:text="${#numbers.formatDecimal(rental.totalPrice, 1, 2)}"></span>
@@ -133,23 +111,11 @@
                         </div>
                     </div>
 
-                    <div class="text-muted small mb-2">
-                        Наемател:
-                        <span class="text-dark"
-                              th:text="|${rental.renter.firstName} ${rental.renter.lastName}|">Име Фамилия</span>
-                    </div>
-
                     <div class="small mb-2">
                         <span class="text-muted">Период:</span>
                         <span th:text="${#temporals.format(rental.startDate, 'dd.MM.yyyy')}"></span>
                         —
                         <span th:text="${#temporals.format(rental.endDate, 'dd.MM.yyyy')}"></span>
-                    </div>
-
-                    <div class="small mb-2">
-                        <span class="text-muted">Адрес:</span>
-                        <span class="fw-semibold" th:text="${rental.city}">Град</span>,
-                        <span th:text="${rental.address}">Адрес</span>
                     </div>
 
                     <div class="d-flex align-items-center justify-content-between mt-3">

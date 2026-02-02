@@ -60,9 +60,9 @@ public class ListingService {
         return "redirect:/listings";
     }
 
-    public String submitDeleteListing(Long listingId) {
+    public String submitDeleteListing(Long listingId, Principal principal) {
         Listing listing = listingRepository.findById(listingId).get();
-        listing.setListingStatus(ListingStatus.DELETED);
+        listing.setListingStatus(listing.getOwner().getUsername().equals(principal.getName()) ? ListingStatus.DELETED_BY_OWNER : ListingStatus.DELETED_BY_ADMIN);
         listingRepository.save(listing);
         return "redirect:/listings";
     }

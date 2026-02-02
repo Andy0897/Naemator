@@ -48,9 +48,14 @@ public class UserController {
         return "register";
     }
 
-    @PostMapping("/submit")
-    public String submitUser(@Valid User user, BindingResult bindingResult, Model model) {
-        return userService.submitUser(user, bindingResult, model);
+    @PostMapping("/submit-create")
+    public String submitCreateUser(@Valid User user, BindingResult bindingResult, Model model) {
+        return userService.submitCreateUser(user, bindingResult, model);
+    }
+
+    @PostMapping("/submit-edit")
+    public String submitEditUser(@Valid User user, BindingResult bindingResult, Model model) {
+        return userService.submitEditUser(user, bindingResult, model);
     }
 
     @GetMapping("/logout")

@@ -1,1 +1,97 @@
-<nav>navbar</nav>
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom" xmlns:th="http://www.w3.org/1999/xhtml"
+     xmlns:sec="http://www.w3.org/1999/xhtml">
+    <div class="container">
+        <a class="navbar-brand fw-semibold" th:href="@{/}">
+            Naemator
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                aria-controls="mainNavbar" aria-expanded="false" aria-label="Меню">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <!-- Left links -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/listings}">Обяви</a>
+                </li>
+
+                <li class="nav-item" sec:authorize="hasAuthority('USER')">
+                    <a class="nav-link" th:href="@{/listings/create}">Публикувай</a>
+                </li>
+
+                <li class="nav-item dropdown" sec:authorize="hasAuthority('USER')">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        Наеми
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" th:href="@{/rentals/my-rents}">Моите наеми</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" th:href="@{/rentals/my-listings-rents}">Наеми на моите обяви</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Admin dropdown -->
+                <li class="nav-item dropdown" sec:authorize="hasAuthority('ADMIN')">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        Админ
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" th:href="@{/users-management}">
+                                Потребители
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" th:href="@{/listings/manage-deleted-listings}">
+                                Изтрити обяви
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <!-- Right links -->
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" th:href="@{/login}">Вход</a>
+                </li>
+
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="btn btn-simple-primary ms-lg-2" th:href="@{/register}">
+                        Регистрация
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        Профил
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" th:href="@{/profile}">Моят профил</a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <!-- Spring Security default logout endpoint -->
+                            <form th:action="@{/logout}" method="post" class="px-3 py-1 m-0">
+                                <button type="submit" class="btn btn-outline-secondary btn-sm w-100">
+                                    Изход
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
