@@ -68,7 +68,8 @@
                         <div class="d-flex flex-column flex-sm-row gap-2 mt-3">
 
                             <!-- Rent button -->
-                            <button th:if="${!isMine}"
+                            <button sec:authorize="hasAuthority('USER')"
+                                    th:if="${!isMine}"
                                     class="btn btn-simple-primary btn-lg"
                                     th:onclick="|location.href='/rentals/rent/${listing.id}'|">
                                 Наеми

@@ -1,8 +1,10 @@
 package com.example.Naemator.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ public class Listing {
     private String title;
 
     @NotEmpty(message = "Полето не може да бъде празно")
+    @Size(max = 500, message = "Описанието не трябва да надвишава 500 символа")
     private String description;
 
     @Min(value = 0)

@@ -26,11 +26,21 @@
                                 <div class="col-12 col-md-6">
                                     <label class="form-label fw-semibold">Град или село</label>
                                     <input th:field="*{city}" class="form-control" placeholder="Напр. София">
+                                    <div class="mt-1">
+                                        <div class="text-danger small"
+                                             th:each="error : ${#fields.errors('city')}"
+                                             th:text="${error}"></div>
+                                    </div>
                                 </div>
 
                                 <div class="col-12 col-md-6">
                                     <label class="form-label fw-semibold">Адрес</label>
                                     <input th:field="*{address}" class="form-control" placeholder="ул. ..., № ...">
+                                    <div class="mt-1">
+                                        <div class="text-danger small"
+                                             th:each="error : ${#fields.errors('address')}"
+                                             th:text="${error}"></div>
+                                    </div>
                                 </div>
 
                                 <div class="col-12">
@@ -42,6 +52,12 @@
                                            autocomplete="off">
                                     <div class="form-text">
                                         Избери начална и крайна дата. Заетите дни са блокирани.
+                                    </div>
+                                    <div class="mt-1">
+                                        <div class="text-danger small"
+                                             th:if="${invalidDates}">
+                                            Датите са невалидни
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -52,6 +52,7 @@ public class RentalController {
         Rental rental = new Rental();
         model.addAttribute("rental", rental);
         model.addAttribute("listingId", listingId);
+        model.addAttribute("invalidDates", false);
         return "rental/rent";
     }
 

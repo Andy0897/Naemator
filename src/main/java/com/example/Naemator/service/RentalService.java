@@ -29,9 +29,10 @@ public class RentalService {
     }
 
     public String submitRentListing(Rental rental, BindingResult bindingResult, Long listingId, Principal principal, Model model) {
-        if(bindingResult.hasFieldErrors("city") || bindingResult.hasFieldErrors("address")) {
+        if(bindingResult.hasFieldErrors("city") || bindingResult.hasFieldErrors("address") || rental.getStartDate() == null || rental.getEndDate() == null) {
             model.addAttribute("rental", rental);
             model.addAttribute("listingId", listingId);
+            model.addAttribute("invalidDates", rental.getStartDate() == null || rental.getEndDate() == null);
             return "rental/rent";
         }
         Listing listing = listingRepository.findById(listingId).get();

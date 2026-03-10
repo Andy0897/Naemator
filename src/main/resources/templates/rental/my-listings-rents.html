@@ -46,7 +46,7 @@
                             <td class="ps-3">
                                 <div class="d-flex gap-3 align-items-center">
                                     <img class="rounded border"
-                                         s                                         style="width:56px;height:56px;object-fit:cover;"
+                                         s                                         style="width:56px;height:56px;object-fit:contain;"
                                          th:src="@{'data:image/jpeg;base64,' + ${encoder.encodeToBase64(rental.listing.images.get(0))}}"
                                          alt="Снимка">
 
@@ -117,7 +117,7 @@
 
                     <div class="d-flex gap-3 align-items-center mb-2">
                         <img class="rounded border"
-                             style="width:64px;height:64px;object-fit:cover;"
+                             style="width:64px;height:64px;object-fit:contain;"
                              th:src="@{'data:image/jpeg;base64,' + ${encoder.encodeToBase64(rental.listing.images.get(0))}}"
                              alt="Снимка">
 

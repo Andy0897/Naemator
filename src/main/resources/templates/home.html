@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="~{fragments/head}"></head>
 
 <body class="simple-bg">
@@ -24,11 +24,6 @@
                     <a th:href="@{/listings}"
                        class="btn btn-simple-primary btn-lg px-4">
                         Разгледай обяви
-                    </a>
-
-                    <a th:href="@{/listings/create}"
-                       class="btn btn-outline-secondary btn-lg px-4">
-                        Публикувай обява
                     </a>
                 </div>
             </div>
@@ -81,7 +76,7 @@
         </div>
 
         <!-- CALL TO ACTION -->
-        <div class="text-center mt-5">
+        <div sec:authorize="isAnonymous()" class="text-center mt-5">
             <h3 class="fw-semibold mb-3">
                 Готов ли си да започнеш?
             </h3>
